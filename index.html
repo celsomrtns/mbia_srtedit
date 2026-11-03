@@ -3,44 +3,83 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101311">
+  <meta name="theme-color" content="#101311" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f5f7f2" media="(prefers-color-scheme: light)">
   <title>SRT Edit — Editor de legendas</title>
   <style>
     :root {
       color-scheme: dark;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #101311;
-      color: #eef1ed;
+      background: var(--page-bg);
+      color: var(--text);
       font-synthesis: none;
       text-rendering: optimizeLegibility;
+      --page-bg: #101311;
+      --text: #eef1ed;
       --panel: #181c19;
       --panel-raised: #1d221e;
       --border: #2b322d;
       --muted: #9aa49c;
       --accent: #c6f36a;
       --danger: #ff8d83;
+      --input-bg: #111512;
+      --upload-border: #465047;
+      --upload-bg: radial-gradient(ellipse at top, #1d241d, #171b18 70%);
+      --upload-icon-bg: #20271f;
+      --upload-icon-border: #343d35;
+      --hover-border: #566252;
+      --button-hover-bg: #252c26;
+      --accent-hover: #d7ff8b;
+      --accent-text: #151a11;
+      --focus-border: #92bb51;
+      --focus-ring: #c6f32618;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        color-scheme: light;
+        --page-bg: #f5f7f2;
+        --text: #20251f;
+        --panel: #ffffff;
+        --panel-raised: #f0f3ed;
+        --border: #dce2d8;
+        --muted: #687267;
+        --accent: #75a82c;
+        --danger: #c53b32;
+        --input-bg: #ffffff;
+        --upload-border: #c3cfba;
+        --upload-bg: radial-gradient(ellipse at top, #f3f8e9, #ffffff 75%);
+        --upload-icon-bg: #eef5e5;
+        --upload-icon-border: #d6e3c9;
+        --hover-border: #a7b49d;
+        --button-hover-bg: #e7eddf;
+        --accent-hover: #648f25;
+        --accent-text: #ffffff;
+        --focus-border: #75a82c;
+        --focus-ring: #75a82c30;
+      }
     }
 
     * { box-sizing: border-box; }
-    body { margin: 0; min-width: 320px; min-height: 100vh; }
+    body { margin: 0; min-width: 320px; min-height: 100vh; background: var(--page-bg); color: var(--text); }
     button, input, textarea { font: inherit; }
     button { cursor: pointer; }
     .shell { max-width: 1040px; margin: 0 auto; padding: 38px 28px 72px; }
     .topline { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 48px; }
     .brand { display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 750; letter-spacing: -.03em; }
-    .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; background: var(--accent); color: #141810; font-size: 15px; font-weight: 900; }
+    .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; background: var(--accent); color: var(--accent-text); font-size: 15px; font-weight: 900; }
     .local-badge { color: var(--muted); font-size: 12px; }
     h1 { margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1.07; letter-spacing: -.055em; }
     .intro { max-width: 590px; margin: 14px 0 30px; color: var(--muted); font-size: 15px; line-height: 1.65; }
-    .upload { min-height: 224px; padding: 30px; display: grid; place-items: center; border: 1px dashed #465047; border-radius: 18px; background: radial-gradient(ellipse at top, #1d241d, #171b18 70%); text-align: center; }
-    .upload-icon { display: grid; place-items: center; width: 48px; height: 48px; margin: 0 auto 15px; border: 1px solid #343d35; border-radius: 15px; color: var(--accent); background: #20271f; font-size: 22px; }
+    .upload { min-height: 224px; padding: 30px; display: grid; place-items: center; border: 1px dashed var(--upload-border); border-radius: 18px; background: var(--upload-bg); text-align: center; }
+    .upload-icon { display: grid; place-items: center; width: 48px; height: 48px; margin: 0 auto 15px; border: 1px solid var(--upload-icon-border); border-radius: 15px; color: var(--accent); background: var(--upload-icon-bg); font-size: 22px; }
     .upload h2 { margin: 0 0 7px; font-size: 17px; letter-spacing: -.02em; }
     .upload p { margin: 0 0 19px; color: var(--muted); font-size: 13px; }
-    .button { min-height: 40px; padding: 0 15px; border: 1px solid var(--border); border-radius: 10px; background: var(--panel-raised); color: #eef1ed; font-size: 13px; font-weight: 650; transition: border-color .15s, background .15s, transform .15s; }
-    .button:hover { border-color: #566252; background: #252c26; }
+    .button { min-height: 40px; padding: 0 15px; border: 1px solid var(--border); border-radius: 10px; background: var(--panel-raised); color: var(--text); font-size: 13px; font-weight: 650; transition: border-color .15s, background .15s, transform .15s; }
+    .button:hover { border-color: var(--hover-border); background: var(--button-hover-bg); }
     .button:active { transform: translateY(1px); }
-    .button-primary { border-color: var(--accent); background: var(--accent); color: #151a11; }
-    .button-primary:hover { border-color: #d7ff8b; background: #d7ff8b; }
+    .button-primary { border-color: var(--accent); background: var(--accent); color: var(--accent-text); }
+    .button-primary:hover { border-color: var(--accent-hover); background: var(--accent-hover); }
     .button-small { min-height: 34px; padding: 0 11px; font-size: 12px; }
     .button-danger { color: var(--danger); }
     .button:disabled { cursor: not-allowed; opacity: .45; }
@@ -48,27 +87,32 @@
     .editor.active { display: block; }
     .file-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 22px; }
     .file-details { min-width: 0; }
-    .file-name { overflow: hidden; color: #eef1ed; font-size: 14px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+    .file-name { overflow: hidden; color: var(--text); font-size: 14px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
     .file-count { margin-top: 5px; color: var(--muted); font-size: 12px; }
     .file-actions { display: flex; gap: 8px; flex-shrink: 0; }
-    .sync-panel { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px 20px; border: 1px solid var(--border); border-radius: 14px; background: var(--panel); }
+    .sync-panel { display: flex; flex-direction: column; gap: 16px; padding: 18px 20px; border: 1px solid var(--border); border-radius: 14px; background: var(--panel); }
     .sync-copy h2 { margin: 0 0 5px; font-size: 14px; }
     .sync-copy p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
-    .sync-controls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-    input, textarea { border: 1px solid var(--border); border-radius: 9px; outline: none; background: #111512; color: #eef1ed; }
-    input:focus, textarea:focus { border-color: #92bb51; box-shadow: 0 0 0 3px #c6f32618; }
-    .shift-input { width: 82px; height: 38px; padding: 0 10px; }
-    .unit { margin-left: -3px; color: var(--muted); font-size: 12px; }
+    .sync-controls { display: grid; grid-template-columns: minmax(150px, 1fr) 120px minmax(150px, auto) auto; align-items: end; gap: 14px; }
+    input, textarea { border: 1px solid var(--border); border-radius: 9px; outline: none; background: var(--input-bg); color: var(--text); }
+    input:focus, textarea:focus { border-color: var(--focus-border); box-shadow: 0 0 0 3px var(--focus-ring); }
+    .slider-field, .shift-value { min-width: 0; }
+    .shift-slider { display: block; width: 100%; height: 38px; margin: 0; accent-color: var(--accent); cursor: ew-resize; }
+    .shift-input { width: 100%; height: 38px; padding: 0 10px; }
+    .shift-preview { align-self: center; min-width: 140px; }
+    .shift-preview-value { display: block; min-height: 20px; color: var(--text); font-size: 14px; font-variant-numeric: tabular-nums; font-weight: 700; }
+    .field-label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 11px; font-weight: 650; }
     .list-heading { display: flex; align-items: center; justify-content: space-between; margin: 28px 0 12px; }
     .list-heading h2 { margin: 0; font-size: 14px; }
     .list-heading span { color: var(--muted); font-size: 12px; }
     .blocks { display: grid; gap: 10px; }
+    .insert-block { display: flex; justify-content: center; margin: -3px 0; }
+    .insert-block .button { min-height: 32px; border-style: dashed; color: var(--muted); }
     .block { padding: 15px; border: 1px solid var(--border); border-radius: 13px; background: var(--panel); }
     .block-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
     .block-number { color: var(--muted); font-size: 12px; font-weight: 650; }
     .block-actions { display: flex; gap: 6px; }
     .time-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 11px; }
-    .field-label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 11px; font-weight: 650; }
     .time-input { width: 100%; height: 38px; padding: 0 10px; font-variant-numeric: tabular-nums; }
     .caption-input { width: 100%; min-height: 74px; padding: 10px; resize: vertical; font-size: 13px; line-height: 1.5; }
     .notice { min-height: 20px; margin-top: 12px; color: var(--muted); font-size: 12px; }
@@ -81,11 +125,17 @@
       .shell { padding: 25px 16px 48px; }
       .topline { margin-bottom: 38px; }
       .local-badge { font-size: 11px; }
-      .sync-panel { align-items: flex-start; flex-direction: column; gap: 16px; }
-      .sync-controls { width: 100%; }
-      .sync-controls .button { flex: 1; padding: 0 8px; }
+      .sync-controls { grid-template-columns: minmax(0, 1fr) 100px; }
+      .shift-preview { grid-column: 1; }
+      .sync-controls #apply-shift-button { grid-column: 2; align-self: center; }
       .file-row { align-items: flex-start; }
       .file-actions { flex-direction: column; }
+    }
+    @media (max-width: 430px) {
+      .local-badge { display: none; }
+      .sync-controls { grid-template-columns: minmax(0, 1fr); }
+      .shift-preview, .sync-controls #apply-shift-button { grid-column: auto; }
+      .sync-controls #apply-shift-button { width: 100%; }
     }
   </style>
 </head>
@@ -126,13 +176,22 @@
       <section class="sync-panel" aria-label="Ajuste de sincronia">
         <div class="sync-copy">
           <h2>Ajustar sincronia</h2>
-          <p>Desloque todos os tempos de início e fim de uma vez.</p>
+          <p>Valores negativos adiantam a legenda; positivos atrasam. Ajuste de −60.000 a +60.000 milissegundos.</p>
         </div>
         <div class="sync-controls">
-          <input class="shift-input" id="shift-seconds" type="number" min="0" step="0.1" value="1" aria-label="Quantidade de segundos">
-          <span class="unit">seg</span>
-          <button class="button button-small" id="advance-button" type="button">Adiantar</button>
-          <button class="button button-small" id="delay-button" type="button">Atrasar</button>
+          <label class="slider-field">
+            <span class="field-label">Adiantar ← · Atrasar →</span>
+            <input class="shift-slider" id="shift-slider" type="range" min="-60000" max="60000" step="1" value="0" aria-label="Ajuste de sincronia em milissegundos">
+          </label>
+          <label class="shift-value">
+            <span class="field-label">Ajuste em milissegundos</span>
+            <input class="shift-input" id="shift-milliseconds" type="number" min="-60000" max="60000" step="1" value="0" inputmode="numeric">
+          </label>
+          <div class="shift-preview" aria-live="polite">
+            <span class="field-label">Ajuste selecionado</span>
+            <output class="shift-preview-value" id="shift-display">Sem ajuste</output>
+          </div>
+          <button class="button button-small button-primary" id="apply-shift-button" type="button" disabled>Aplicar ajuste</button>
         </div>
       </section>
 
@@ -152,6 +211,10 @@
       const fileInput = document.getElementById("file-input");
       const blocksElement = document.getElementById("blocks");
       const notice = document.getElementById("notice");
+      const shiftSlider = document.getElementById("shift-slider");
+      const shiftMilliseconds = document.getElementById("shift-milliseconds");
+      const shiftDisplay = document.getElementById("shift-display");
+      const applyShiftButton = document.getElementById("apply-shift-button");
       const timePattern = /^(\d{2,}):([0-5]\d):([0-5]\d)[,.](\d{1,3})$/;
       let captions = [];
       let currentFileName = "legenda.srt";
@@ -196,13 +259,34 @@
         notice.classList.toggle("error", Boolean(isError));
       }
 
+      function formatShift(milliseconds) {
+        if (milliseconds === 0) return "Sem ajuste";
+        const absolute = Math.abs(milliseconds);
+        const seconds = Math.floor(absolute / 1000);
+        const remainingMilliseconds = absolute % 1000;
+        const sign = milliseconds > 0 ? "+" : "−";
+        const parts = [];
+        if (seconds) parts.push(`${seconds} s`);
+        if (remainingMilliseconds || !seconds) parts.push(`${remainingMilliseconds} ms`);
+        return `${sign}${parts.join(" ")}`;
+      }
+
+      function updateShiftControls(value) {
+        const milliseconds = Number(value);
+        shiftSlider.value = String(milliseconds);
+        shiftMilliseconds.value = String(milliseconds);
+        shiftDisplay.textContent = formatShift(milliseconds);
+        shiftSlider.setAttribute("aria-valuetext", formatShift(milliseconds));
+        applyShiftButton.disabled = milliseconds === 0;
+      }
+
       function render() {
         blocksElement.replaceChildren();
         document.getElementById("file-count").textContent = `${captions.length} ${captions.length === 1 ? "bloco" : "blocos"}`;
         if (!captions.length) {
           const empty = document.createElement("div");
           empty.className = "empty-state";
-          empty.textContent = "Nenhum bloco na legenda. Use “+ Adicionar bloco” para criar o primeiro.";
+          empty.textContent = "Nenhum bloco na legenda. Use o botão abaixo para criar o primeiro.";
           blocksElement.append(empty);
         }
 
@@ -214,7 +298,6 @@
             <div class="block-top">
               <span class="block-number">Bloco ${index + 1}</span>
               <div class="block-actions">
-                <button class="button button-small add-button" type="button" aria-label="Adicionar bloco depois do bloco ${index + 1}">+ Adicionar</button>
                 <button class="button button-small button-danger remove-button" type="button" aria-label="Remover bloco ${index + 1}">Remover</button>
               </div>
             </div>
@@ -226,28 +309,39 @@
           `;
           block.querySelector(".text-input").value = caption.text;
           blocksElement.append(block);
+
+          const insertionPoint = document.createElement("div");
+          insertionPoint.className = "insert-block";
+          insertionPoint.innerHTML = `<button class="button button-small add-button" type="button" data-index="${index}" aria-label="Adicionar bloco depois do bloco ${index + 1}">+ Adicionar bloco</button>`;
+          blocksElement.append(insertionPoint);
         });
+
+        if (!captions.length) {
+          const insertionPoint = document.createElement("div");
+          insertionPoint.className = "insert-block";
+          insertionPoint.innerHTML = '<button class="button button-small add-button" type="button" data-index="-1">+ Adicionar bloco</button>';
+          blocksElement.append(insertionPoint);
+        }
       }
 
-      function applyShift(direction) {
+      function applyShift(milliseconds) {
         const invalidTime = blocksElement.querySelector(".time-input[aria-invalid='true']");
         if (invalidTime) {
           invalidTime.focus();
           showNotice("Corrija os tempos inválidos antes de ajustar a sincronia.", true);
           return;
         }
-        const seconds = Number(document.getElementById("shift-seconds").value);
-        if (!Number.isFinite(seconds) || seconds < 0) {
-          showNotice("Informe uma quantidade de segundos válida (zero ou maior).", true);
+        if (!Number.isInteger(milliseconds) || Math.abs(milliseconds) > 60000) {
+          showNotice("Informe um ajuste inteiro entre −60.000 e +60.000 milissegundos.", true);
           return;
         }
-        const delta = seconds * 1000 * direction;
         captions.forEach(caption => {
-          caption.start = Math.max(0, caption.start + delta);
-          caption.end = Math.max(0, caption.end + delta);
+          caption.start = Math.max(0, caption.start + milliseconds);
+          caption.end = Math.max(0, caption.end + milliseconds);
         });
         render();
-        showNotice(`Sincronia ajustada em ${seconds} segundo${seconds === 1 ? "" : "s"}.`);
+        showNotice(`Sincronia ajustada: ${formatShift(milliseconds)} ${milliseconds < 0 ? "(adiantado)" : "(atrasado)"}.`);
+        updateShiftControls(0);
       }
 
       function addCaption(index) {
@@ -255,12 +349,35 @@
         const start = previous ? previous.end : 0;
         captions.splice(index + 1, 0, { start, end: start + 2000, text: "" });
         render();
-        blocksElement.children[index + 1]?.querySelector(".text-input").focus();
+        blocksElement.querySelector(`.block[data-index="${index + 1}"] .text-input`)?.focus();
         showNotice("Bloco adicionado.");
       }
 
       document.getElementById("open-button").addEventListener("click", () => fileInput.click());
       document.getElementById("change-file").addEventListener("click", () => fileInput.click());
+      shiftSlider.addEventListener("input", () => updateShiftControls(shiftSlider.value));
+      shiftMilliseconds.addEventListener("input", () => {
+        if (shiftMilliseconds.value === "") {
+          applyShiftButton.disabled = true;
+          shiftDisplay.textContent = "Informe um valor em ms";
+          return;
+        }
+        const value = Number(shiftMilliseconds.value);
+        if (Number.isInteger(value) && Math.abs(value) <= 60000) {
+          updateShiftControls(value);
+          return;
+        }
+        applyShiftButton.disabled = true;
+        shiftDisplay.textContent = "Entre −60.000 e +60.000 ms";
+      });
+      shiftMilliseconds.addEventListener("change", () => {
+        const value = Number(shiftMilliseconds.value);
+        if (!Number.isInteger(value) || Math.abs(value) > 60000) {
+          updateShiftControls(0);
+          showNotice("O ajuste deve ser um valor inteiro entre −60.000 e +60.000 milissegundos.", true);
+        }
+      });
+      applyShiftButton.addEventListener("click", () => applyShift(Number(shiftMilliseconds.value)));
       fileInput.addEventListener("change", async () => {
         const file = fileInput.files?.[0];
         if (!file) return;
@@ -269,6 +386,7 @@
           captions = result;
           currentFileName = file.name;
           document.getElementById("file-name").textContent = currentFileName;
+          updateShiftControls(0);
           welcome.classList.add("hidden");
           editor.classList.add("active");
           render();
@@ -282,8 +400,6 @@
         }
       });
 
-      document.getElementById("advance-button").addEventListener("click", () => applyShift(-1));
-      document.getElementById("delay-button").addEventListener("click", () => applyShift(1));
       document.getElementById("save-button").addEventListener("click", () => {
         const invalidTime = blocksElement.querySelector(".time-input[aria-invalid='true']");
         if (invalidTime) {
@@ -332,22 +448,18 @@
       });
 
       blocksElement.addEventListener("click", event => {
+        const addButton = event.target.closest(".add-button");
+        if (addButton) {
+          addCaption(Number(addButton.dataset.index));
+          return;
+        }
         const block = event.target.closest(".block");
-        if (event.target.closest(".add-button")) {
-          addCaption(Number(block.dataset.index));
-        } else if (event.target.closest(".remove-button")) {
+        if (event.target.closest(".remove-button")) {
           captions.splice(Number(block.dataset.index), 1);
           render();
           showNotice("Bloco removido.");
         }
       });
-
-      const addFirstButton = document.createElement("button");
-      addFirstButton.className = "button button-small";
-      addFirstButton.type = "button";
-      addFirstButton.textContent = "+ Adicionar bloco";
-      addFirstButton.addEventListener("click", () => addCaption(captions.length - 1));
-      document.querySelector(".list-heading").append(addFirstButton);
     })();
   </script>
 </body>
